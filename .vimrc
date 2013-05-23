@@ -24,6 +24,21 @@ augroup MyAutoCmd
 augroup END
 
 "---------------------------------------------------------------------
+" neobundle.vim {{{
+"---------------------------------------------------------------------
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+endif
+
+" プラグインのインストール先を指定
+call neobundle#rc(expand('~/.vim/bundle/'))
+
+" neobundle.vim で neobundle.vi を更新するためのプラグイン
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+"}}}
+
+"---------------------------------------------------------------------
 " basic {{{
 "---------------------------------------------------------------------
 syntax on
@@ -171,7 +186,6 @@ nnoremap ,r :<C-u>registers<Return>
 
 " 行結合時に、空白を挟まない
 nnoremap J gJ
-
 "}}}
 
 "---------------------------------------------------------------------
@@ -214,61 +228,29 @@ au QuickfixCmdPost vimgrep cw
 "---------------------------------------------------------------------
 " ファンクションキー {{{
 "---------------------------------------------------------------------
-nnoremap <F2> :Unite buffer file file_mru<CR>
+"nnoremap <F2> :Unite buffer file file_mru<CR>
 " nnoremap <F2> :FufBuffer<CR>
 " nnoremap <F3> :FufFile<CR>
 " nnoremap <F4> :FufMruFile<CR>
 
 "<F5>はコード実行用
 
-"ペーストモードのON/OFF
-set pastetoggle=<F12>
-"}}}
-
-"---------------------------------------------------------------------
-" 入力補完{{{
-"---------------------------------------------------------------------
-"ivmapの無効化
-function! g:Ivunmapfunc(key)
-	if mapcheck(a:key, 'i') != ""
-		execute "iunmap ".a:key
-	endif
-	if mapcheck(a:key, 'v') != ""
-		execute "vunmap ".a:key
-	endif
-endfunction
-
 "}}}
 
 "---------------------------------------------------------------------
 " ファイル毎の設定 {{{
 "---------------------------------------------------------------------
+augroup diff
+	autocmd MyAutoCmd Filetype diff setlocal encoding=utf-8
+augroup END
+
 " .vimperatorrc もFiletype:vimとみなす
 autocmd MyAutoCmd BufNewFile,BufRead .vimperatorrc setfiletype vim
-
-"---------------------------------------------------------------------
-" omnifunc {{{
-"---------------------------------------------------------------------
-set omnifunc=syntaxcomplete#Complete
-augroup omnifunc
-	autocmd!
-	autocmd FileType python set omnifunc=pythoncomplete#Complete
-	autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType java setlocal omnifunc=javacomplete#Complete
-	autocmd FileType java setlocal cfu=VjdeCompleteFun
-	autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-	autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-	autocmd FileType c setlocal omnifunc=ccomplete#Complete
-augroup end
-"}}}
 "}}}
 
 "---------------------------------------------------------------------
-"何故かhighlightが末尾にないと効かない {{{
+" 何故かhighlightが末尾にないと効かない {{{
 "---------------------------------------------------------------------
-
 "全角スペースを強調
 highlight! zenkakuda ctermbg=grey ctermfg=grey guibg=black
 if &encoding ==# 'utf-8'
@@ -278,12 +260,5 @@ else
 	" sjisの全角スペースの文字コードを指定してやる
 	match zenkakuda /\%u8140/
 endif
-
-"---------------------------------------------------------------------
-" macのcuiで、クリップボード共有{{{
-"---------------------------------------------------------------------
-nnoremap <silent> <Space>y :.w !pbcopy<CR><CR>
-vnoremap <silent> <Space>y :w !pbcopy<CR><CR>
-nnoremap <silent> <Space>p :r !pbpaste<CR>
-vnoremap <silent> <Space>p :r !pbpaste<CR>
 "}}}
+
