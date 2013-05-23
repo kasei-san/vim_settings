@@ -35,8 +35,44 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 
 " neobundle.vim で neobundle.vi を更新するためのプラグイン
 NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neocomplcache'
+
+" 起動時にチェック
+NeoBundleCheck
+"}}}
+
+"---------------------------------------------------------------------
+" neocomplcache.vim {{{
+"---------------------------------------------------------------------
+" 起動時に有効
+let g:neocomplcache_enable_at_startup = 1
+" 大文字が入力されるまで、大文字小文字を無視して補完
+let g:neocomplcache_enable_smart_case = 1
+" スネークケースの補完を有効化
+let g:neocomplcache_enable_underbar_completion = 1
+" 3文字から補完候補に出す
+let g:neocomplcache_min_syntax_length = 3
+" 補完候補を出すときに、自動的に一番上の候補を選択
+let g:neocomplcache_enable_auto_select = 1
+
+" tabで選択
+inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
+
+" vim のオムニ補完を有効化
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+
+" rubyのオムニ補完を読むようにする
+if !exists('g:neocomplcache_omni_patterns')
+  let g:neocomplcache_omni_patterns = {}
+endif
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 "}}}
+
+
 
 "---------------------------------------------------------------------
 " basic {{{
