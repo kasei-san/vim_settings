@@ -315,9 +315,10 @@ augroup END
 
 " .vimperatorrc もFiletype:vimとみなす
 autocmd MyAutoCmd BufNewFile,BufRead .vimperatorrc setfiletype vim
+autocmd MyAutoCmd BufNewFile,BufRead private setfiletype vim
 "}}}
 
-source private
+source ~/.vim/private
 
 "---------------------------------------------------------------------
 " 何故かhighlightが末尾にないと効かない {{{
