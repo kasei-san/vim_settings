@@ -77,7 +77,26 @@ autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 "---------------------------------------------------------------------
 " w3m.vim {{{
 "---------------------------------------------------------------------
-nnoremap ,w :W3mTab google 
+let g:w3m#external_browser = 'open -a Firefox'
+" 編集できるようにする
+au FileType w3m set modifiable
+command! -nargs=0 CfRelease  W3m http://sv01.feedforce.jp/redmine/wiki/2/%E3%82%B5%E3%83%86%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88
+command! -nargs=0 ApiRelease W3m http://sv01.feedforce.jp/redmine/wiki/contents-feeder/API%E3%81%AE%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88
+
+" 選択行がURLの場合、,w で ブラウザでopen
+" via : http://d.hatena.ne.jp/shunsuk/20110508/1304865150
+function! HandleURI()
+  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
+  echo s:uri
+  if s:uri != ""
+    exec "!open \"" . s:uri . "\""
+  else
+    echo "No URI found in line."
+  endif
+endfunction
+
+map ,w :call HandleURI()<CR>
+"}}}
 
 "---------------------------------------------------------------------
 " vim-ref {{{
@@ -289,11 +308,11 @@ au QuickfixCmdPost vimgrep cw
 " ファイル毎の設定 {{{
 "---------------------------------------------------------------------
 augroup diff
-	autocmd MyAutoCmd Filetype diff setlocal encoding=utf-8
+  autocmd MyAutoCmd Filetype diff setlocal encoding=utf-8
 augroup END
 
 augroup vimrc
-  autocmd FileType gitcommit DiffGitCached | only | split | b 1
+  autocmd FileType gitcommit DiffGitCached | only | split | buffer 1 | syntax on
 augroup END
 
 " .vimperatorrc もFiletype:vimとみなす

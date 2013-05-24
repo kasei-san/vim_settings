@@ -1,0 +1,16 @@
+kind=added
+names=mv
+visibility=private 
+
+--- mv -> ()
+
+ファイルを移動します (ファイル名を変更します)。
+
+Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY.
+
+  ruby -run -e mv -- [OPTION] SOURCE DEST
+
+  -v          verbose
+
+@see [[man:mv(1)]]
+

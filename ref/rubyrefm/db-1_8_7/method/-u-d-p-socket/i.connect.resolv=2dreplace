@@ -1,0 +1,9 @@
+kind=redefined
+names=connect
+visibility=public
+
+--- connect(host, port)
+
+[[m:UDPSocket#connect]]のパラメータ host の名前解決に [[lib:resolv]] 
+ライブラリを使います。
+

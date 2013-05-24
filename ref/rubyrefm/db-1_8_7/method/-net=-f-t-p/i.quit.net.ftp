@@ -1,0 +1,8 @@
+kind=defined
+names=quit
+visibility=public
+
+--- quit
+
+ログアウトします。
+

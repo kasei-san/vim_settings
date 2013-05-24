@@ -1,0 +1,8 @@
+kind=added
+names=nonblock?
+visibility=public
+
+--- nonblock?
+
+self がノンブロックモードならば真を、ブロックモードなら偽を返す。
+

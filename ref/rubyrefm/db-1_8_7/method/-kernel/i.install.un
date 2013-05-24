@@ -1,0 +1,18 @@
+kind=added
+names=install
+visibility=private 
+
+--- install -> ()
+ファイルをコピーし、その属性を設定します。
+
+Copy SOURCE to DEST.
+
+  ruby -run -e install -- [OPTION] SOURCE DEST
+
+  -p          apply access/modification times of SOURCE files to
+              corresponding destination files
+  -m          set permission mode (as in chmod), instead of 0755
+  -v          verbose
+
+@see [[man:install(1)]]
+

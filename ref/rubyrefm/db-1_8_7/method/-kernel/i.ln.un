@@ -1,0 +1,15 @@
+kind=added
+names=ln
+visibility=private 
+
+--- ln -> ()
+ファイルへのリンクを作成します。
+
+  ruby -run -e ln -- [OPTION] TARGET LINK_NAME
+
+  -s          make symbolic links instead of hard links
+  -f          remove existing destination files
+  -v          verbose
+
+@see [[man:ln(1)]]
+

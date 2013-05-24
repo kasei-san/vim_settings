@@ -1,0 +1,6 @@
+kind=defined
+names=parse_resolv_conf
+visibility=public
+
+--- parse_resolv_conf(filename)
+

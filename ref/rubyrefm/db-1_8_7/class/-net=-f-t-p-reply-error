@@ -1,0 +1,7 @@
+superclass=Net=FTPError
+type=class
+library=net.ftp
+extended=
+included=
+
+

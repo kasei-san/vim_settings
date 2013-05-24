@@ -1,0 +1,6 @@
+kind=defined
+names=unlock
+visibility=public
+
+--- unlock(path, body, initheader = nil)
+

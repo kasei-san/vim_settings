@@ -1,0 +1,7 @@
+kind=defined
+names=string,to_s
+visibility=public
+
+--- string
+--- to_s
+

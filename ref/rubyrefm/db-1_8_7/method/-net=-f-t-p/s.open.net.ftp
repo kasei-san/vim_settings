@@ -1,0 +1,8 @@
+kind=defined
+names=open
+visibility=public
+
+--- open(host, user = nil, passwd = nil, acct = nil)
+
+host を省略できない以外は new と同じです。
+

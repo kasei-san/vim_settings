@@ -1,0 +1,8 @@
+kind=defined
+names=closed?
+visibility=public
+
+--- closed?
+
+接続が切れている時に真を返します。
+

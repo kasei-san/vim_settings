@@ -1,0 +1,10 @@
+kind=defined
+names=put2,request_put
+visibility=public
+
+--- request_put(path, data, initheader = nil)
+--- request_put(path, data, initheader = nil) {|response| .... }
+--- put2(path, data, initheader = nil)
+--- put2(path, data, initheader = nil) {|response| .... }
+
+

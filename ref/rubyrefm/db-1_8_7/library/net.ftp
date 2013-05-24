@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=Net=FTP,Net=FTPError,Net=FTPReplyError,Net=FTPTempError,Net=FTPPermError,Net=FTPProtoError
+is_sublibrary=false
+
+FTP プロトコルを扱うライブラリです。

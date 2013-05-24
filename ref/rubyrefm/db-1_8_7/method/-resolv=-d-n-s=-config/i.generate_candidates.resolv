@@ -1,0 +1,6 @@
+kind=defined
+names=generate_candidates
+visibility=public
+
+--- generate_candidates(name)
+

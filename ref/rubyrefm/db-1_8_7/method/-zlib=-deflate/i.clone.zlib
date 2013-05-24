@@ -1,0 +1,9 @@
+kind=defined
+names=clone
+visibility=public
+
+--- clone -> self
+
+執筆者募集。
+圧縮ストリームを複製します。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=move
+visibility=public
+
+--- move(path, body, initheader = nil)
+

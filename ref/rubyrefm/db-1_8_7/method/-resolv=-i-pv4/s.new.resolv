@@ -1,0 +1,8 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(address)
+
+4 byte の文字列 address から Resolv::IPv4 のインスタンスを生成します。
+

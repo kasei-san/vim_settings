@@ -1,0 +1,6 @@
+kind=defined
+names=lock
+visibility=public
+
+--- lock(path, body, initheader = nil)
+

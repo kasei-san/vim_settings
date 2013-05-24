@@ -1,0 +1,9 @@
+kind=defined
+names=each,each_header
+visibility=public
+
+--- each {|name, val| .... }
+--- each_header {|name, val| .... }
+
+ヘッダ名とその値に対するくりかえし。ヘッダ名は小文字で統一されます。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=each_value
+visibility=public
+
+--- each_value {|value| .... }
+

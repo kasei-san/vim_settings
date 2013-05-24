@@ -1,0 +1,16 @@
+kind=defined
+names=find_index
+visibility=public
+
+--- find_index                    -> Enumerable::Enumerator
+--- find_index{|obj| ... }  -> Integer | nil
+
+すべての要素をブロックに渡して評価し、最初に真になった要素の
+インデックスを返します。
+
+一つも真にならなければ nil を返します。
+
+   (1..10).find_index  {|i| i % 5 == 0 and i % 7 == 0 }   #=> nil
+   (1..100).find_index {|i| i % 5 == 0 and i % 7 == 0 }   #=> 34
+
+

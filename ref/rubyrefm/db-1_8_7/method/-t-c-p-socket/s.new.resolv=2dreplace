@@ -1,0 +1,9 @@
+kind=redefined
+names=new
+visibility=public
+
+--- new(host, serv, *rest)
+
+[[m:TCPSocket.new]]のパラメータ local_host の名前解決に [[lib:resolv]] 
+ライブラリを使います。
+

@@ -1,0 +1,9 @@
+kind=added
+names=tosjis
+visibility=public
+
+--- tosjis
+
+self のエンコーディングを shift_jis に変換した文字列を
+返します。
+

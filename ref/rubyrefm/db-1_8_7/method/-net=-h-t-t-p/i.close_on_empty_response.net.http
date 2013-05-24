@@ -1,0 +1,7 @@
+kind=defined
+names=close_on_empty_response,close_on_empty_response=
+visibility=public
+
+--- close_on_empty_response
+--- close_on_empty_response=(bool)
+

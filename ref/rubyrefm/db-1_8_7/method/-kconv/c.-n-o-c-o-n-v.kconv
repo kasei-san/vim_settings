@@ -1,0 +1,8 @@
+kind=defined
+names=NOCONV
+visibility=public
+
+--- NOCONV
+
+変換されないことを表します。
+

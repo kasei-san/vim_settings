@@ -1,0 +1,16 @@
+kind=added
+names=mkdir
+visibility=private 
+
+--- mkdir -> ()
+ディレクトリを作成します。
+
+Create the DIR, if they do not already exist.
+
+  ruby -run -e mkdir -- [OPTION] DIR
+
+  -p          no error if existing, make parent directories as needed
+  -v          verbose
+
+@see [[man:mkdir(1)]]
+

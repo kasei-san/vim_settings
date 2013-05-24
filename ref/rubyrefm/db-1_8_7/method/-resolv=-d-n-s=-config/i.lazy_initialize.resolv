@@ -1,0 +1,6 @@
+kind=defined
+names=lazy_initialize
+visibility=public
+
+--- lazy_initialize
+

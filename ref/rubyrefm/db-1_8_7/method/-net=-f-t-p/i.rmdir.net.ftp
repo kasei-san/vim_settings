@@ -1,0 +1,8 @@
+kind=defined
+names=rmdir
+visibility=public
+
+--- rmdir(dirname)
+
+ディレクトリを削除します。
+

@@ -1,0 +1,4 @@
+#!/bin/sh
+REFE_PATH=`readlink $0`
+cd "`dirname "$REFE_PATH"`"
+exec ruby -Ke -I bitclust/lib bitclust/bin/refe.rb -d db-1_8_7 "$@"

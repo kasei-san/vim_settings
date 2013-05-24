@@ -1,0 +1,6 @@
+kind=defined
+names=decode_rdata
+visibility=public
+
+--- decode_rdata(msg)
+

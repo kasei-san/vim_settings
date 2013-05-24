@@ -1,0 +1,9 @@
+kind=defined
+names=length,size
+visibility=public
+
+--- size
+--- length
+
+このメソッドは obsolete です。
+

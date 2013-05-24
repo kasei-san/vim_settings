@@ -1,0 +1,8 @@
+kind=defined
+names=sec
+visibility=public
+
+--- sec    -> Integer
+
+秒を整数で返します。
+

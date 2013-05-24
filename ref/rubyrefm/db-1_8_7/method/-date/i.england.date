@@ -1,0 +1,10 @@
+kind=defined
+names=england
+visibility=public
+
+--- england -> Date
+このメソッドは、new_start(Date::ENGLAND) と等価です。
+
+@see [[m:Date#new_start]], [[m:Date::ENGLAND]]
+
+

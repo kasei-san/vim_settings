@@ -1,0 +1,8 @@
+kind=defined
+names=system
+visibility=public
+
+--- system
+
+サーバーの OS のタイプを返します。
+

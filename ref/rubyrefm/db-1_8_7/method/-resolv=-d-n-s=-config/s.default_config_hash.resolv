@@ -1,0 +1,6 @@
+kind=defined
+names=default_config_hash
+visibility=public
+
+--- default_config_hash(filename = '/etc/resolv.conf')
+

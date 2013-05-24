@@ -1,0 +1,10 @@
+kind=defined
+names=data_type
+visibility=public
+
+--- data_type -> Fixnum
+
+ストリームに入力されたデータの形式を推測します。
+返り値は Zlib::BINARY, Zlib::ASCII, Zlib::UNKNOWN の
+いずれかです。
+

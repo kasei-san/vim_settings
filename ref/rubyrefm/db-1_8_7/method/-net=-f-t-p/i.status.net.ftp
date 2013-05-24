@@ -1,0 +1,8 @@
+kind=defined
+names=status
+visibility=public
+
+--- status
+
+現在の状態を返します。
+

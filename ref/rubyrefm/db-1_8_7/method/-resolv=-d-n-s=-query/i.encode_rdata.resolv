@@ -1,0 +1,7 @@
+kind=defined
+names=encode_rdata
+visibility=public
+
+--- encode_rdata(msg)
+
+

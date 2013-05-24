@@ -1,0 +1,8 @@
+kind=defined
+names=help
+visibility=public
+
+--- help(arg = nil)
+
+help 情報を返します。
+

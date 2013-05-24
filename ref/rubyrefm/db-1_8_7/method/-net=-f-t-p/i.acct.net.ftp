@@ -1,0 +1,8 @@
+kind=defined
+names=acct
+visibility=public
+
+--- acct(account)
+
+サーバーにアカウント情報を送ります。
+

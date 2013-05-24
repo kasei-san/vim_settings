@@ -1,0 +1,6 @@
+kind=defined
+names=mkcol
+visibility=public
+
+--- mkcol(path, body, initheader = nil)
+

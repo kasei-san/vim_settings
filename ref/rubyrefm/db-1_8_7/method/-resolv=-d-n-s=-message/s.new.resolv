@@ -1,0 +1,6 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(id = ((@@identifier += 1) & 0xffff))
+

@@ -1,0 +1,9 @@
+kind=redefined
+names=new
+visibility=public
+
+--- new(host, serv)
+
+[[m:SOCKSSocket.new]]のパラメータ host の名前解決に [[lib:resolv]] 
+ライブラリを使います。
+

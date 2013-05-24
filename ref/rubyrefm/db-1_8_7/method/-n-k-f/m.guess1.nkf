@@ -1,0 +1,8 @@
+kind=defined
+names=guess1
+visibility=public
+
+--- guess1(str)
+
+ruby 1.8.1 以前の NKF.guess と同じものです。
+

@@ -1,0 +1,9 @@
+kind=added
+names=toeuc
+visibility=public
+
+--- toeuc
+
+self のエンコーディングを euc-jp に変換した文字列を
+返します。
+

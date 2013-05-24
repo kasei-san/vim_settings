@@ -1,0 +1,7 @@
+kind=defined
+names=UN
+visibility=public
+
+--- Sync_m::UN
+ロックされていない状態を表す定数です。
+

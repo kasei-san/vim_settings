@@ -1,0 +1,10 @@
+kind=defined
+names=proxy_port,proxyport
+visibility=public
+
+--- proxy_port
+--- proxyport
+
+プロクシ経由で接続する HTTP オブジェクトならプロクシのポート。
+そうでないなら nil。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=extract_resources
+visibility=public
+
+--- extract_resources(msg, name, typeclass)
+

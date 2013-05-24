@@ -1,0 +1,9 @@
+kind=defined
+names=UTF16
+visibility=public
+
+--- UTF16
+
+((<ruby 1.8.2 feature>)):
+UTF16 を表します。
+

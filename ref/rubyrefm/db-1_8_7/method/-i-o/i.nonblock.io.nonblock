@@ -1,0 +1,8 @@
+kind=added
+names=nonblock
+visibility=public
+
+--- nonblock(bool = true) { ... }
+
+ブロック実行中、一時的に self のブロックモードを変更する。
+bool が真ならノンブロックモード、偽ならブロックモードになる。

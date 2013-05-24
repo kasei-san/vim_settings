@@ -1,0 +1,9 @@
+kind=defined
+names=binary=
+visibility=public
+
+--- binary=(bool)
+
+表現タイプがバイナリ(IMAGE)であるか否かを設定します。
+
+

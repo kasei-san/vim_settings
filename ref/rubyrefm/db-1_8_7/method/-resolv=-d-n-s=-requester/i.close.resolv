@@ -1,0 +1,7 @@
+kind=defined
+names=close,delete
+visibility=public
+
+--- close
+--- delete(arg)
+

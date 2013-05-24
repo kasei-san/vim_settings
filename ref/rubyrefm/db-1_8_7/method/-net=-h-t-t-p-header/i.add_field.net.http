@@ -1,0 +1,8 @@
+kind=defined
+names=add_field
+visibility=public
+
+--- add_field(key, val)
+
+key ヘッダフィールドに val を追加します。
+

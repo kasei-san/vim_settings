@@ -1,0 +1,6 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(first_string, *rest_strings)
+

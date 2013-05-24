@@ -1,0 +1,6 @@
+kind=defined
+names=proxy_pass
+visibility=public
+
+--- proxy_pass
+

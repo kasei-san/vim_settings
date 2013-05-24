@@ -1,0 +1,8 @@
+kind=defined
+names=PASSTHROUGH_EXCEPTIONS
+visibility=private 
+
+--- PASSTHROUGH_EXCEPTIONS
+
+These exceptions are not caught by #run.
+

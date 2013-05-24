@@ -1,0 +1,8 @@
+kind=defined
+names=resume=
+visibility=public
+
+--- resume=(boolean)
+
+resume の値を設定します。
+

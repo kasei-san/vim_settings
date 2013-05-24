@@ -1,0 +1,8 @@
+kind=defined
+names=welcome
+visibility=public
+
+--- welcome
+
+サーバのウェルカムメッセージを返します。
+

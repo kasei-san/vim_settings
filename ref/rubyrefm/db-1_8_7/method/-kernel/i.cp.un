@@ -1,0 +1,17 @@
+kind=added
+names=cp
+visibility=private 
+
+--- cp -> ()
+ファイルやディレクトリをコピーします。
+
+Copy SOURCE to DEST, or multiple SOURCE(s) to DIRECTORY
+
+  ruby -run -e cp -- [OPTION] SOURCE DEST
+
+  -p          preserve file attributes if possible
+  -r          copy recursively
+  -v          verbose
+
+@see [[man:cp(1)]]
+

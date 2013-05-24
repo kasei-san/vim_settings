@@ -1,0 +1,9 @@
+kind=defined
+names=getdir,pwd
+visibility=public
+
+--- pwd
+--- getdir
+
+カレントディレクトリを返します。
+

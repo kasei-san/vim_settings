@@ -1,0 +1,8 @@
+kind=defined
+names=basic_auth
+visibility=public
+
+--- basic_auth(account, password)
+
+Authorization: ヘッダを BASIC 認証用にセットします。
+

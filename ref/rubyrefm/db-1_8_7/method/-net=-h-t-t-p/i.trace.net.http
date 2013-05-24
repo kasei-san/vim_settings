@@ -1,0 +1,6 @@
+kind=defined
+names=trace
+visibility=public
+
+--- trace(path, initheader = nil)
+
