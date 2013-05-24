@@ -80,8 +80,6 @@ autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 let g:w3m#external_browser = 'open -a Firefox'
 " 編集できるようにする
 au FileType w3m set modifiable
-command! -nargs=0 CfRelease  W3m http://sv01.feedforce.jp/redmine/wiki/2/%E3%82%B5%E3%83%86%E3%83%A9%E3%82%A4%E3%83%88%E3%81%AE%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88
-command! -nargs=0 ApiRelease W3m http://sv01.feedforce.jp/redmine/wiki/contents-feeder/API%E3%81%AE%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88
 
 " 選択行がURLの場合、,w で ブラウザでopen
 " via : http://d.hatena.ne.jp/shunsuk/20110508/1304865150
@@ -318,6 +316,8 @@ augroup END
 " .vimperatorrc もFiletype:vimとみなす
 autocmd MyAutoCmd BufNewFile,BufRead .vimperatorrc setfiletype vim
 "}}}
+
+source private
 
 "---------------------------------------------------------------------
 " 何故かhighlightが末尾にないと効かない {{{
