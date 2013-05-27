@@ -33,16 +33,15 @@ endif
 " プラグインのインストール先を指定
 call neobundle#rc(expand('~/.vim/bundle/'))
 
-" neobundle.vim で neobundle.vi を更新するためのプラグイン
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'yuratomo/w3m.vim'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'vim-scripts/postmail.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
-NeoBundle 'ruby-matchit'
-NeoBundle 'h1mesuke/vim-alignta'
-NeoBundle 'The-NERD-Commenter'
+NeoBundle 'ruby-matchit'         " ruby で % を使った移動に対応
+NeoBundle 'h1mesuke/vim-alignta' " 縦軸の整形
+NeoBundle 'The-NERD-Commenter'   " コメントトグル
 
 " 起動時にチェック
 NeoBundleCheck
