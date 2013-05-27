@@ -39,6 +39,7 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'yuratomo/w3m.vim'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'vim-scripts/postmail.vim'
+NeoBundle 'vim-scripts/svn-diff.vim'
 
 " 起動時にチェック
 NeoBundleCheck
