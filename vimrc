@@ -44,6 +44,7 @@ NeoBundle 'h1mesuke/vim-alignta' " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'   " コメントトグル
 " $ sudo easy_install markdown
 NeoBundle 'kakkyz81/evervim'
+NeoBundle 'thinca/vim-quickrun'
 
 " 起動時にチェック
 NeoBundleCheck
@@ -115,6 +116,13 @@ command! -nargs=* Refe Ref refe <args>
 let NERDSpaceDelims = 1
 nmap ,c<Space> <Plug>NERDCommenterToggle
 vmap ,c<Space> <Plug>NERDCommenterToggle
+"}}}
+
+"---------------------------------------------------------------------
+" quickrun {{{
+"---------------------------------------------------------------------
+nmap <F5> <plug>(quickrun)
+let g:quickrun_config={'*': {'split': '%{winheight(0)/5}'}} " 横分割にする
 "}}}
 
 "---------------------------------------------------------------------
