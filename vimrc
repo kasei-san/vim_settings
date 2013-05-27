@@ -328,6 +328,10 @@ augroup END
 " .vimperatorrc もFiletype:vimとみなす
 autocmd MyAutoCmd BufNewFile,BufRead .vimperatorrc setfiletype vim
 autocmd MyAutoCmd BufNewFile,BufRead private setfiletype vim
+
+" ファイルタイプ毎の折りたたみ設定
+autocmd MyAutoCmd Filetype vim setlocal foldmethod=marker
+autocmd MyAutoCmd Filetype ruby setlocal foldmethod=syntax
 "}}}
 
 source ~/.vim/private
