@@ -38,6 +38,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'yuratomo/w3m.vim'
 NeoBundle 'thinca/vim-ref'
+NeoBundle 'vim-scripts/postmail.vim'
 
 " 起動時にチェック
 NeoBundleCheck
