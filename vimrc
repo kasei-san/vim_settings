@@ -42,6 +42,7 @@ NeoBundle 'vim-scripts/postmail.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
 NeoBundle 'ruby-matchit'
 NeoBundle 'h1mesuke/vim-alignta'
+NeoBundle 'The-NERD-Commenter'
 
 " 起動時にチェック
 NeoBundleCheck
@@ -105,6 +106,14 @@ map ,w :call HandleURI()<CR>
 "---------------------------------------------------------------------
 " Refe で、Ref refe と同様にする
 command! -nargs=* Refe Ref refe <args>
+"}}}
+
+"---------------------------------------------------------------------
+" The-NERD-Commenter {{{
+"---------------------------------------------------------------------
+let NERDSpaceDelims = 1
+nmap ,c<Space> <Plug>NERDCommenterToggle
+vmap ,c<Space> <Plug>NERDCommenterToggle
 "}}}
 
 "---------------------------------------------------------------------
