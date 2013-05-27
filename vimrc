@@ -41,6 +41,7 @@ NeoBundle 'thinca/vim-ref'
 NeoBundle 'vim-scripts/postmail.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
 NeoBundle 'ruby-matchit'
+NeoBundle 'h1mesuke/vim-alignta'
 
 " 起動時にチェック
 NeoBundleCheck
