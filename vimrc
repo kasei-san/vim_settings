@@ -42,6 +42,8 @@ NeoBundle 'vim-scripts/svn-diff.vim'
 NeoBundle 'ruby-matchit'         " ruby で % を使った移動に対応
 NeoBundle 'h1mesuke/vim-alignta' " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'   " コメントトグル
+" $ sudo easy_install markdown
+NeoBundle 'kakkyz81/evervim'
 
 " 起動時にチェック
 NeoBundleCheck
