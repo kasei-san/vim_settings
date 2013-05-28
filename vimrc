@@ -45,6 +45,9 @@ NeoBundle 'The-NERD-Commenter'   " コメントトグル
 " $ sudo easy_install markdown
 NeoBundle 'kakkyz81/evervim'
 NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'Shougo/vimproc.vim'   " 遅延評価ライブラリ
+" $ cd ~/.vim/bundle/vimproc.vim
+" $ make -f make_mac.mak
 
 " 起動時にチェック
 NeoBundleCheck
@@ -68,16 +71,16 @@ let g:neocomplcache_enable_auto_select = 1
 inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
 
 " vim のオムニ補完を有効化
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd MyAutoCmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd MyAutoCmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd MyAutoCmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 
 " rubyのオムニ補完を読むようにする
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd MyAutoCmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 "}}}
 
@@ -122,7 +125,15 @@ vmap ,c<Space> <Plug>NERDCommenterToggle
 " quickrun {{{
 "---------------------------------------------------------------------
 nmap <F5> <plug>(quickrun)
-let g:quickrun_config={'*': {'split': '%{winheight(0)/5}'}} " 横分割にする
+let g:quickrun_config   = {'*': {'split': '%{winheight(0)/5}'}} " 横分割にする
+let g:quickrun_config._ = {'runner' : 'vimproc'}                " vimproc対応
+
+" rspec 対応
+let g:quickrun_config['ruby.rspec'] = {'command': "spec"}
+augroup RSpec
+  autocmd MyAutoCmd BufWinEnter,BufNewFile *_spec.rb set filetype=ruby.rspec
+  autocmd MyAutoCmd BufWritePost,FileWritePost *_spec.rb QuickRun
+augroup END
 "}}}
 
 "---------------------------------------------------------------------
@@ -332,7 +343,7 @@ augroup diff
 augroup END
 
 augroup vimrc
-  autocmd FileType gitcommit DiffGitCached | only | split | buffer 1 | syntax on
+  autocmd MyAutoCmd FileType gitcommit DiffGitCached | only | split | buffer 1 | syntax on
 augroup END
 
 " .vimperatorrc もFiletype:vimとみなす
