@@ -62,8 +62,8 @@ let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_smart_case = 1
 " スネークケースの補完を有効化
 let g:neocomplcache_enable_underbar_completion = 1
-" 3文字から補完候補に出す
-let g:neocomplcache_min_syntax_length = 3
+" 2文字から補完候補に出す
+let g:neocomplcache_min_syntax_length = 2
 " 補完候補を出すときに、自動的に一番上の候補を選択
 let g:neocomplcache_enable_auto_select = 1
 
@@ -134,6 +134,12 @@ augroup RSpec
   autocmd MyAutoCmd BufWinEnter,BufNewFile *_spec.rb set filetype=ruby.rspec
   autocmd MyAutoCmd BufWritePost,FileWritePost *_spec.rb QuickRun
 augroup END
+"}}}
+
+"---------------------------------------------------------------------
+" evervim {{{
+"---------------------------------------------------------------------
+map ,e :EvervimNotebookList<CR>
 "}}}
 
 "---------------------------------------------------------------------
@@ -353,6 +359,7 @@ autocmd MyAutoCmd BufNewFile,BufRead private setfiletype vim
 " ファイルタイプ毎の折りたたみ設定
 autocmd MyAutoCmd Filetype vim setlocal foldmethod=marker
 autocmd MyAutoCmd Filetype ruby setlocal foldmethod=syntax
+autocmd MyAutoCmd Filetype ruby setlocal foldlevel=1
 "}}}
 
 source ~/.vim/private
