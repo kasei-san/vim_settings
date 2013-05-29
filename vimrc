@@ -48,6 +48,7 @@ NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'Shougo/vimproc.vim'   " 遅延評価ライブラリ
 " $ cd ~/.vim/bundle/vimproc.vim
 " $ make -f make_mac.mak
+NeoBundle 'kien/ctrlp.vim'       " ファイルセレクタ
 
 " 起動時にチェック
 NeoBundleCheck
@@ -359,7 +360,7 @@ autocmd MyAutoCmd BufNewFile,BufRead private setfiletype vim
 " ファイルタイプ毎の折りたたみ設定
 autocmd MyAutoCmd Filetype vim setlocal foldmethod=marker
 autocmd MyAutoCmd Filetype ruby setlocal foldmethod=syntax
-autocmd MyAutoCmd Filetype ruby setlocal foldlevel=1
+autocmd MyAutoCmd Filetype ruby setlocal foldlevel=2
 "}}}
 
 source ~/.vim/private
