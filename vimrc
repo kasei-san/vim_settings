@@ -133,7 +133,7 @@ let g:quickrun_config._ = {'runner' : 'vimproc'}                " vimproc対応
 let g:quickrun_config['ruby.rspec'] = {'command': "spec"}
 augroup RSpec
   autocmd MyAutoCmd BufWinEnter,BufNewFile *_spec.rb set filetype=ruby.rspec
-  autocmd MyAutoCmd BufWritePost,FileWritePost *_spec.rb QuickRun
+  " autocmd MyAutoCmd BufWritePost,FileWritePost *_spec.rb QuickRun
 augroup END
 "}}}
 
@@ -353,11 +353,14 @@ augroup END
 
 augroup vimrc
   autocmd MyAutoCmd FileType gitcommit DiffGitCached | only | split | buffer 1 | syntax on
+  " .vimperatorrc もFiletype:vimとみなす
+  autocmd MyAutoCmd BufNewFile,BufRead .vimperatorrc setfiletype vim
+  autocmd MyAutoCmd BufNewFile,BufRead private setfiletype vim
 augroup END
 
-" .vimperatorrc もFiletype:vimとみなす
-autocmd MyAutoCmd BufNewFile,BufRead .vimperatorrc setfiletype vim
-autocmd MyAutoCmd BufNewFile,BufRead private setfiletype vim
+augroup erb
+  autocmd MyAutoCmd BufNewFile,BufRead *.erb setfiletype eruby.html
+augroup END
 
 " ファイルタイプ毎の折りたたみ設定
 autocmd MyAutoCmd Filetype vim setlocal foldmethod=marker
