@@ -67,6 +67,13 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_min_syntax_length = 2
 " 補完候補を出すときに、自動的に一番上の候補を選択
 let g:neocomplcache_enable_auto_select = 1
+" 全てのバッファを検索候補に
+let g:neocomplcache_same_filetype_lists = {}
+let g:neocomplcache_same_filetype_lists._ = '_'
+" if !exists('g:neocomplcache_keyword_patterns')
+"   let g:neocomplcache_keyword_patterns = {}
+" endif
+"let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
 " tabで選択
 inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
