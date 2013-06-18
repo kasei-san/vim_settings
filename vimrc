@@ -377,6 +377,10 @@ autocmd MyAutoCmd Filetype ruby setlocal foldlevel=999
 
 source ~/.vim/private
 
+" tmpディレクトリでは、バックアップファイルを作らない
+" via : Mac OS X で cron を使う(EDITOR=vim) - yuyarinの日記 http://d.hatena.ne.jp/yuyarin/20100225/1267084794
+set backupskip=/tmp/*,/private/tmp/*
+
 "---------------------------------------------------------------------
 " 何故かhighlightが末尾にないと効かない {{{
 "---------------------------------------------------------------------
