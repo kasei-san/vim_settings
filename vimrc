@@ -372,7 +372,7 @@ augroup END
 " ファイルタイプ毎の折りたたみ設定
 autocmd MyAutoCmd Filetype vim setlocal foldmethod=marker
 autocmd MyAutoCmd Filetype ruby setlocal foldmethod=syntax
-autocmd MyAutoCmd Filetype ruby setlocal foldlevel=2
+autocmd MyAutoCmd Filetype ruby setlocal foldlevel=999
 "}}}
 
 source ~/.vim/private
