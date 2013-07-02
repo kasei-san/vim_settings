@@ -271,6 +271,10 @@ nnoremap g# g#zz
 "ビジュアルモードで選択されている文字列を検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 
+"検索時に very magic とする
+" set verymagic ってないのね...
+nnoremap /  /\v
+
 "}}}
 
 "---------------------------------------------------------------------
