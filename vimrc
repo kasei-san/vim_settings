@@ -34,35 +34,14 @@ endif
 call neobundle#rc(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'yuratomo/w3m.vim'
-NeoBundle 'thinca/vim-ref'
-NeoBundle 'vim-scripts/postmail.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
 NeoBundle 'h1mesuke/vim-alignta'     " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'       " コメントトグル
-NeoBundle 'kakkyz81/evervim'
- " $ sudo easy_install markdown
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'Shougo/vimproc.vim'       " 遅延評価ライブラリ
- " $ cd ~/.vim/bundle/vimproc.vim
- " $ make -f make_mac.mak
-NeoBundle 'kien/ctrlp.vim'           " ファイルセレクタ
 NeoBundle 'tpope/vim-rails'          " まずは、:AT でテストコードに移動することを覚える
-" :Rtree でディレクトリツリー表示
-" o,O でディレクトリオープン
-" p,P で親ディレクトリに移動
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'vim-scripts/copypath.vim' " :CopyPath、:CopyFileName でクリップボードに入れる
-" NeoBundle 'vim-scripts/AutoComplPop'
 NeoBundle 'Shougo/neocomplcache'
-" yssh2 でカーソルのあるテキストオブジェクトを<h2></h2>で囲む
-" dst でカーソルのあるテキストオブジェクトのタグを削除
-" csth2 でカーソルのあるテキストオブジェクトのタグ h2 に変更
-" dit でタグの中身を削除
-" それぞれのコマンドの t を 囲んでいる文字列に変えれば、"abc" とかの囲み文字や中身も変換可能
-" refs : http://www.karakaram.com/textobject-surround
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'rbtnn/vimconsole.vim'
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'rhysd/vim-textobj-ruby'
 
 " 起動時にチェック
 NeoBundleCheck
@@ -118,61 +97,11 @@ autocmd InsertEnter * NeoComplCacheCachingBuffer
 "}}}
 
 "---------------------------------------------------------------------
-" w3m.vim {{{
-"---------------------------------------------------------------------
-let g:w3m#external_browser = 'open -a Firefox'
-" 編集できるようにする
-au FileType w3m set modifiable
-
-" 選択行がURLの場合、,w で ブラウザでopen
-" via : http://d.hatena.ne.jp/shunsuk/20110508/1304865150
-function! HandleURI()
-  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
-  echo s:uri
-  if s:uri != ""
-    exec "!open \"" . s:uri . "\""
-  else
-    echo "No URI found in line."
-  endif
-endfunction
-
-map ,w :call HandleURI()<CR>
-"}}}
-
-"---------------------------------------------------------------------
-" vim-ref {{{
-"---------------------------------------------------------------------
-" Refe で、Ref refe と同様にする
-command! -nargs=* Refe Ref refe <args>
-"}}}
-
-"---------------------------------------------------------------------
 " The-NERD-Commenter {{{
 "---------------------------------------------------------------------
 let NERDSpaceDelims = 1
 nmap ,c<Space> <Plug>NERDCommenterToggle
 vmap ,c<Space> <Plug>NERDCommenterToggle
-"}}}
-
-"---------------------------------------------------------------------
-" quickrun {{{
-"---------------------------------------------------------------------
-nmap <F5> <plug>(quickrun)
-let g:quickrun_config   = {'*': {'split': '%{winheight(0)/5}'}} " 横分割にする
-let g:quickrun_config._ = {'runner' : 'vimproc'}                " vimproc対応
-
-" rspec 対応
-let g:quickrun_config['ruby.rspec'] = {'command': "spec"}
-augroup RSpec
-  autocmd MyAutoCmd BufWinEnter,BufNewFile *_spec.rb set filetype=ruby.rspec
-  " autocmd MyAutoCmd BufWritePost,FileWritePost *_spec.rb QuickRun
-augroup END
-"}}}
-
-"---------------------------------------------------------------------
-" evervim {{{
-"---------------------------------------------------------------------
-map ,e :EvervimNotebookList<CR>
 "}}}
 
 "---------------------------------------------------------------------
@@ -271,6 +200,9 @@ set visualbell
 
 " モードラインを有効にする
 set modeline
+
+" コマンドラインウィンドウの幅
+set cmdwinheight=20
 "}}}
 
 "---------------------------------------------------------------------
@@ -291,10 +223,9 @@ nmap <c-j><c-j> :nohlsearch<Return><ESC>
 "検索時に結果が中央に来るようにする
 nnoremap n nzz
 nnoremap N Nzz
+"* は、単語ではなく、文字列として検索
 nnoremap * g*zz
 nnoremap # #zz
-" nnoremap g* g*zz
-" nnoremap g# g#zz
 
 "ビジュアルモードで選択されている文字列を検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
@@ -326,8 +257,6 @@ noremap k gkzz
 vnoremap j gjzz
 vnoremap k gk
 
-" Shift-w で前の単語
-noremap <s-w> b
 " Shift-u でredo
 noremap <s-u> <c-r>
 " mark
@@ -338,13 +267,10 @@ nnoremap ,r :<C-u>registers<Return>
 " 行結合時に、空白を挟まない
 nnoremap J gJ
 
-
 " コマンドライン移動
 " s-left, c-left がうまく動作しなかったので
-cnoremap <S-tab> <S-Left>
-cnoremap <C-tab> <S-Right>
-cnoremap <S-tab> <C-Left>
-cnoremap <C-tab> <C-Right>
+cnoremap <tab><Left> <S-Left>
+cnoremap <tab><Right> <S-Right>
 "}}}
 
 "---------------------------------------------------------------------
@@ -392,8 +318,8 @@ au QuickfixCmdPost vimgrep cw
 "---------------------------------------------------------------------
 " ファンクションキー {{{
 "---------------------------------------------------------------------
-nnoremap <F2> :NERDTreeToggle<CR>
-"nnoremap <F2> :Unite buffer file file_mru<CR>
+" nnoremap <F2> :NERDTreeToggle<CR>
+" nnoremap <F2> :Unite buffer file file_mru<CR>
 " nnoremap <F2> :FufBuffer<CR>
 " nnoremap <F3> :FufFile<CR>
 " nnoremap <F4> :FufMruFile<CR>
