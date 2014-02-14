@@ -34,61 +34,87 @@ endif
 call neobundle#rc(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'vim-scripts/AutoComplPop'
 NeoBundle 'yuratomo/w3m.vim'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'vim-scripts/postmail.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
-NeoBundle 'ruby-matchit'         " ruby で % を使った移動に対応
-NeoBundle 'h1mesuke/vim-alignta' " 縦軸の整形
-NeoBundle 'The-NERD-Commenter'   " コメントトグル
-" $ sudo easy_install markdown
+NeoBundle 'h1mesuke/vim-alignta'     " 縦軸の整形
+NeoBundle 'The-NERD-Commenter'       " コメントトグル
 NeoBundle 'kakkyz81/evervim'
+ " $ sudo easy_install markdown
 NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'Shougo/vimproc.vim'   " 遅延評価ライブラリ
-" $ cd ~/.vim/bundle/vimproc.vim
-" $ make -f make_mac.mak
-NeoBundle 'kien/ctrlp.vim'       " ファイルセレクタ
+NeoBundle 'Shougo/vimproc.vim'       " 遅延評価ライブラリ
+ " $ cd ~/.vim/bundle/vimproc.vim
+ " $ make -f make_mac.mak
+NeoBundle 'kien/ctrlp.vim'           " ファイルセレクタ
+NeoBundle 'tpope/vim-rails'          " まずは、:AT でテストコードに移動することを覚える
+" :Rtree でディレクトリツリー表示
+" o,O でディレクトリオープン
+" p,P で親ディレクトリに移動
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'vim-scripts/copypath.vim' " :CopyPath、:CopyFileName でクリップボードに入れる
+" NeoBundle 'vim-scripts/AutoComplPop'
+NeoBundle 'Shougo/neocomplcache'
+" yssh2 でカーソルのあるテキストオブジェクトを<h2></h2>で囲む
+" dst でカーソルのあるテキストオブジェクトのタグを削除
+" csth2 でカーソルのあるテキストオブジェクトのタグ h2 に変更
+" dit でタグの中身を削除
+" それぞれのコマンドの t を 囲んでいる文字列に変えれば、"abc" とかの囲み文字や中身も変換可能
+" refs : http://www.karakaram.com/textobject-surround
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'rbtnn/vimconsole.vim'
 
 " 起動時にチェック
 NeoBundleCheck
 "}}}
 
+source $VIMRUNTIME/macros/matchit.vim "ruby の do/end を % ジャンプできるようにする
+
 "---------------------------------------------------------------------
 " 補完 {{{
 "---------------------------------------------------------------------
 " vim のオムニ補完を有効化
-autocmd MyAutoCmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd MyAutoCmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd MyAutoCmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd MyAutoCmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd MyAutoCmd FileType html       setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd MyAutoCmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
+autocmd MyAutoCmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
 
-" rubyのオムニ補完を読むようにする
+"---------------------------------------------------------------------
+"   neocomplcache {{{
+"---------------------------------------------------------------------
+let g:neocomplcache_enable_at_startup  = 1 " 起動時に neocomplcache を有効化
+let g:neocomplcache_enable_smart_case  = 1 " 大文字を入力するまで、大文字/小文字を無視して補完
+let g:neocomplcache_min_syntax_length  = 3 " 3文字以上の単語を補完候補としてキャッシュ
+let g:neocomplcache_enable_auto_select = 1 " 最初の候補を選択している状態にする
+
+" tabで選択
+inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
+
+" 全てのバッファを検索候補に
+let g:neocomplcache_same_filetype_lists = {}
+let g:neocomplcache_same_filetype_lists._ = '_'
+
+" キーワードと見なす正規表現を設定
+if !exists('g:neocomplcache_keyword_patterns')
+  let g:neocomplcache_keyword_patterns = {}
+endif
+" \h: [A-Za-z_] \w: [0-9A-Za-z_] refs help regexp
+let g:neocomplcache_keyword_patterns.default = '\h\w*'
+" ruby のデフォルトの neocomplcache_keyword_patterns では、File:: の後の補完が想定した感じにならなかった
+let g:neocomplcache_keyword_patterns.ruby    = '\h\w*'
+
+" Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-autocmd MyAutoCmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-" ref http://blog.blueblack.net/item_164
-"<TAB>で補完
-" {{{ Autocompletion using the TAB key
-" This function determines, wether we are on the start of the line text (then tab indents) or
-" if we want to try autocompletion
-function! InsertTabWrapper()
-        let col = col('.') - 1
-        if !col || getline('.')[col - 1] !~ '\k'
-                return "\<TAB>"
-        else
-                if pumvisible()
-                        return "\<C-N>"
-                else
-                        return "\<C-N>\<C-P>"
-                end
-        endif
-endfunction
-" Remap the tab key to select action with InsertTabWrapper
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-" }}} Autocompletion using the TAB key
+" インサートモードに入った時に現在のバッファのキャッシュを更新したい
+" * 間違えて入力した単語がキャッシュされるのがやだ
+autocmd InsertEnter * NeoComplCacheCachingBuffer
+
+"  }}}
 "}}}
 
 "---------------------------------------------------------------------
@@ -159,6 +185,8 @@ filetype plugin on
 
 " 行番号を表示
 set number
+" 相対行番号を有効にする
+" set relativenumber
 
 " ルーラーを表示
 set ruler
@@ -209,7 +237,8 @@ set complete=.,w,b,u,t,i,k
 "共有のクリップボードを使用する
 set clipboard=unnamed
 "非guivimで、ビジュアルモードで選択した領域をクリップボードに格納
-set clipboard+=autoselect
+" 単語の差し替えをcwpでやりたいので、一旦コメントアウト
+" set clipboard+=autoselect
 
 "カーソルを行頭/末尾で止めない
 set whichwrap=b,s,h,l,<,>,[,]
@@ -241,7 +270,7 @@ set nowrap
 set visualbell
 
 " モードラインを有効にする
-:set modeline
+set modeline
 "}}}
 
 "---------------------------------------------------------------------
@@ -259,14 +288,13 @@ set hlsearch
 "ハイライト消去
 nmap <c-j><c-j> :nohlsearch<Return><ESC>
 
+"検索時に結果が中央に来るようにする
 nnoremap n nzz
 nnoremap N Nzz
-
-"カーソル位置の単語検索
-nnoremap * *zz
+nnoremap * g*zz
 nnoremap # #zz
-nnoremap g* g*zz
-nnoremap g# g#zz
+" nnoremap g* g*zz
+" nnoremap g# g#zz
 
 "ビジュアルモードで選択されている文字列を検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
@@ -275,6 +303,9 @@ vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><C
 " set verymagic ってないのね...
 nnoremap /  /\v
 
+" s*でカーソル下のキーワードを置換
+nnoremap <expr> s* ':%s/\<' . expand('<cword>') . '\>/'
+vnoremap <expr> s* ':s/\<' . expand('<cword>') . '\>/'
 "}}}
 
 "---------------------------------------------------------------------
@@ -306,6 +337,14 @@ nnoremap ,r :<C-u>registers<Return>
 
 " 行結合時に、空白を挟まない
 nnoremap J gJ
+
+
+" コマンドライン移動
+" s-left, c-left がうまく動作しなかったので
+cnoremap <S-tab> <S-Left>
+cnoremap <C-tab> <S-Right>
+cnoremap <S-tab> <C-Left>
+cnoremap <C-tab> <C-Right>
 "}}}
 
 "---------------------------------------------------------------------
@@ -340,6 +379,11 @@ command! -bang -nargs=? Utf8
 \ edit<bang> ++enc=utf-8 <args>
 command! -bang -nargs=? Sjis
 \ edit<bang> ++enc=sjis <args>
+command! -bang -nargs=? Euc
+\ edit<bang> ++enc=euc-jp <args>
+
+command! CopyRelativePath
+\ let @*=join(remove( split( expand( '%:p' ), "/" ), len( split( getcwd(), "/" ) ), -1 ), "/") | echo "copied"
 
 " grep に cw(Quickfixを表示)を追加
 au QuickfixCmdPost vimgrep cw
@@ -348,6 +392,7 @@ au QuickfixCmdPost vimgrep cw
 "---------------------------------------------------------------------
 " ファンクションキー {{{
 "---------------------------------------------------------------------
+nnoremap <F2> :NERDTreeToggle<CR>
 "nnoremap <F2> :Unite buffer file file_mru<CR>
 " nnoremap <F2> :FufBuffer<CR>
 " nnoremap <F3> :FufFile<CR>
