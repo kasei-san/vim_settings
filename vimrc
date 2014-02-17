@@ -17,19 +17,11 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
 NeoBundle 'h1mesuke/vim-alignta'     " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'       " コメントトグル
-" neocomplete と干渉する問題がある
-" refs https://github.com/tpope/vim-rails/issues/283#issuecomment-25172471
-" NeoBundle 'tpope/vim-rails'          " まずは、:AT でテストコードに移動することを覚える
-" NeoBundle 'Valloric/YouCompleteMe', {
-      " \ 'build' : {
-      " \ 'mac' : './install.sh',
-      " \ },
-      " \ }
 NeoBundle 'Shougo/neocomplete.vim'
-
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'rhysd/vim-textobj-ruby'
+NeoBundle 'kana/vim-altr'
 
 " 起動時にチェック
 NeoBundleCheck
@@ -359,3 +351,23 @@ else
 endif
 "}}}
 
+"---------------------------------------------------------------------
+" vim-rails が neocomplete と干渉する問題対策 {{{
+" refs https://github.com/tpope/vim-rails/issues/283#issuecomment-25172471
+"---------------------------------------------------------------------
+
+" rspec の シンタックス
+function! RSpecSyntax()
+  hi def link rubyRailsTestMethod             Function
+  syn keyword rubyRailsTestMethod describe context it its specify shared_examples_for it_should_behave_like before after around subject fixtures controller_name helper_name
+  syn match rubyRailsTestMethod '\<let\>!\='
+  syn keyword rubyRailsTestMethod violated pending expect double mock mock_model stub_model
+  syn match rubyRailsTestMethod '\.\@<!\<stub\>!\@!'
+endfunction
+autocmd BufReadPost *_spec.rb call RSpecSyntax()
+
+" :A で、テストと実装切り替え
+call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+call altr#define('controller/%.rb', 'spec/controller/%_spec.rb')
+command! A call altr#forward()
+"}}}
