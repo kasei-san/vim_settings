@@ -1,23 +1,3 @@
-"---------------------------------------------------------------------------
-" memo {{{
-"---------------------------------------------------------------------------
-" コマンドの定義：(!をつけて上書き可能にすべき)
-" command! A B
-
-" optionを変数のように使う
-" &option
-" let &option = "test"
-
-" 配列
-" let s:array = []
-" for s:i in s:array
-"     ～
-" end for
-
-" join(s:array, ",")
-" let s:array = split(&runtimepath, ",")
-"}}}
-
 "autocmd 初期化
 augroup MyAutoCmd
   autocmd!
@@ -37,8 +17,16 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'vim-scripts/svn-diff.vim'
 NeoBundle 'h1mesuke/vim-alignta'     " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'       " コメントトグル
-NeoBundle 'tpope/vim-rails'          " まずは、:AT でテストコードに移動することを覚える
-NeoBundle 'Shougo/neocomplcache'
+" neocomplete と干渉する問題がある
+" refs https://github.com/tpope/vim-rails/issues/283#issuecomment-25172471
+" NeoBundle 'tpope/vim-rails'          " まずは、:AT でテストコードに移動することを覚える
+" NeoBundle 'Valloric/YouCompleteMe', {
+      " \ 'build' : {
+      " \ 'mac' : './install.sh',
+      " \ },
+      " \ }
+NeoBundle 'Shougo/neocomplete.vim'
+
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'rhysd/vim-textobj-ruby'
@@ -52,48 +40,49 @@ source $VIMRUNTIME/macros/matchit.vim "ruby の do/end を % ジャンプでき�
 "---------------------------------------------------------------------
 " 補完 {{{
 "---------------------------------------------------------------------
-" vim のオムニ補完を有効化
-autocmd MyAutoCmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd MyAutoCmd FileType html       setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd MyAutoCmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
-autocmd MyAutoCmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
+" vim のオムニ補完を有効化(軽量化の為、試験的にコメントアウト)
+" autocmd MyAutoCmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+" autocmd MyAutoCmd FileType html       setlocal omnifunc=htmlcomplete#CompleteTags
+" autocmd MyAutoCmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
+" autocmd MyAutoCmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
 
-"---------------------------------------------------------------------
-"   neocomplcache {{{
-"---------------------------------------------------------------------
-let g:neocomplcache_enable_at_startup  = 1 " 起動時に neocomplcache を有効化
-let g:neocomplcache_enable_smart_case  = 1 " 大文字を入力するまで、大文字/小文字を無視して補完
-let g:neocomplcache_min_syntax_length  = 3 " 3文字以上の単語を補完候補としてキャッシュ
-let g:neocomplcache_enable_auto_select = 1 " 最初の候補を選択している状態にする
+" 起動時に neocomplete を有効化
+let g:neocomplete#enable_at_startup = 1
+" 大文字を入力するまで、大文字/小文字を無視して補完
+let g:neocomplete#enable_smart_case = 1
+ " n文字以上の単語を補完候補としてキャッシュ
+let g:neocomplete#sources#syntax#min_keyword_length = 4
+" 補完が止まった際に、スキップする長さを短くする
+let g:neocomplete#skip_auto_completion_time = '0.2'
+" 補完開始文字数
+let g:neocomplete#auto_completion_start_length = 2
+" 最初の候補を選択している状態にする
+let g:neocomplete#enable_auto_select = 1
+" キャッシュしないファイル
+let g:neocomplete#sources#buffer#disabled_pattern = '\.log|\.csv|\.tsv'
+
+" デフォルト: ['file', 'tag', 'vim', 'dictionary', 'omni', 'member', 'syntax', 'include', 'buffer', 'file/include']
+let g:neocomplete#sources = {
+  \ '_' : ['vim', 'include', 'buffer', 'file/include']
+  \ }
 
 " tabで選択
 inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
 
 " 全てのバッファを検索候補に
-let g:neocomplcache_same_filetype_lists = {}
-let g:neocomplcache_same_filetype_lists._ = '_'
+let g:neocomplete#same_filetype_lists = {}
+let g:neocomplete#same_filetype_lists._ = '_'
 
 " キーワードと見なす正規表現を設定
-if !exists('g:neocomplcache_keyword_patterns')
-  let g:neocomplcache_keyword_patterns = {}
+if !exists('g:neocomplete#keyword_patterns')
+  let g:neocomplete#keyword_patterns = {}
 endif
 " \h: [A-Za-z_] \w: [0-9A-Za-z_] refs help regexp
-let g:neocomplcache_keyword_patterns.default = '\h\w*'
-" ruby のデフォルトの neocomplcache_keyword_patterns では、File:: の後の補完が想定した感じにならなかった
-let g:neocomplcache_keyword_patterns.ruby    = '\h\w*'
+let g:neocomplete#keyword_patterns.default = '\h\w*'
+" ruby のデフォルトの neocomplete#keyword_patterns では、File:: の後の補完が想定した感じにならなかった
+let g:neocomplete#keyword_patterns.ruby = '\h\w*'
 
-" Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-
-" インサートモードに入った時に現在のバッファのキャッシュを更新したい
-" * 間違えて入力した単語がキャッシュされるのがやだ
-autocmd InsertEnter * NeoComplCacheCachingBuffer
-
-"  }}}
 "}}}
 
 "---------------------------------------------------------------------
@@ -348,8 +337,6 @@ augroup END
 
 " ファイルタイプ毎の折りたたみ設定
 autocmd MyAutoCmd Filetype vim setlocal foldmethod=marker
-autocmd MyAutoCmd Filetype ruby setlocal foldmethod=syntax
-autocmd MyAutoCmd Filetype ruby setlocal foldlevel=999
 "}}}
 
 source ~/.vim/private
