@@ -117,7 +117,7 @@ source $VIMRUNTIME/macros/matchit.vim "ruby の do/end を % ジャンプでき�
 " junk file."{{{
 " ref: http://vim-users.jp/2010/11/hack181/
 "---------------------------------------------------------------------
-command! -nargs=? Junk call s:open_junk_file(<f-args>) " 起動時に Junk を実行
+command! -nargs=? Junk call s:open_junk_file(<f-args>)
 
 function! s:open_junk_file(...)
   if !isdirectory(s:Junk_dir())
