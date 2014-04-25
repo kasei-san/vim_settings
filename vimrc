@@ -18,14 +18,14 @@ endif
 call neobundle#rc(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'vim-scripts/svn-diff.vim'
+NeoBundle 'vim-scripts/svn-diff.vim' " commit 時に差分を出してくれる
 NeoBundle 'h1mesuke/vim-alignta'     " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'       " コメントトグル
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'rhysd/vim-textobj-ruby'
-NeoBundle 'kana/vim-altr'
+NeoBundle 'Shougo/neocomplete.vim'   " 自動補完
+NeoBundle 'tpope/vim-surround'       " テキストオブジェクトを囲っている文字列をいじれる
+NeoBundle 'kana/vim-textobj-user'    " 自作のテキストオブジェクトを作れる
+NeoBundle 'rhysd/vim-textobj-ruby'   " ruby 用のテキストオブジェクトを追加
+NeoBundle 'kana/vim-altr'            " 任意のファイルをトグルして開く
 
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -34,6 +34,33 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 NeoBundle 'vim-jp/vimdoc-ja'
 NeoBundle 'itchyny/lightline.vim'
+
+"---------------------------------------------------------------------
+" unite {{{
+"---------------------------------------------------------------------
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'ujihisa/unite-colorscheme'
+NeoBundle 'ujihisa/unite-font'
+"}}}
+
+"---------------------------------------------------------------------
+" colorscheme {{{
+"---------------------------------------------------------------------
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'vim-scripts/twilight'
+NeoBundle 'jonathanfilip/vim-lucius'
+NeoBundle 'jpo/vim-railscasts-theme'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'vim-scripts/Wombat'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'vim-scripts/rdark'
+NeoBundle 'cocopon/iceberg.vim'
+
+" 起動時にチェック
+NeoBundleCheck
+"}}}
+
 "}}}
 
 "---------------------------------------------------------------------
@@ -83,32 +110,6 @@ endfunction
 function! MyMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
-"}}}
-
-"---------------------------------------------------------------------
-" unite {{{
-"---------------------------------------------------------------------
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'ujihisa/unite-font'
-"}}}
-
-"---------------------------------------------------------------------
-" colorscheme {{{
-"---------------------------------------------------------------------
-NeoBundle 'nanotech/jellybeans.vim'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'vim-scripts/twilight'
-NeoBundle 'jonathanfilip/vim-lucius'
-NeoBundle 'jpo/vim-railscasts-theme'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'vim-scripts/Wombat'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'vim-scripts/rdark'
-NeoBundle 'cocopon/iceberg.vim'
-
-" 起動時にチェック
-NeoBundleCheck
 "}}}
 
 source $VIMRUNTIME/macros/matchit.vim "ruby の do/end を % ジャンプできるようにする
@@ -301,9 +302,6 @@ set complete=.,w,b,u,t,i,k
 
 "共有のクリップボードを使用する
 set clipboard=unnamed
-"非guivimで、ビジュアルモードで選択した領域をクリップボードに格納
-" 単語の差し替えをcwpでやりたいので、一旦コメントアウト
-" set clipboard+=autoselect
 
 "カーソルを行頭/末尾で止めない
 set whichwrap=b,s,h,l,<,>,[,]
@@ -381,9 +379,6 @@ nnoremap /  /\v
 nnoremap <expr> s* ':%s/\<' . expand('<cword>') . '\>/'
 vnoremap <expr> s* ':s/\<' . expand('<cword>') . '\>/'
 
-" Escで、画面再描画と、ハイライト消去
-" noremap <Esc> :nohlsearch<Return>:redraw!<Return><Esc>
-
 "}}}
 
 "---------------------------------------------------------------------
@@ -426,30 +421,6 @@ inoremap ¥ \
 "}}}
 
 "---------------------------------------------------------------------
-" ステータスライン {{{
-"---------------------------------------------------------------------
- set statusline=　
-" "set statusline+=[%n]\  " バッファ番号
-" set statusline+=%f\     " ファイル名
-" set statusline+=%{'['.(&fenc!=''?&fenc:'?').'-'.&ff.']'} " 文字コード
-" set statusline+=%y      " ファイルタイプ
-" "set statusline+=%r      " 読み取り専用フラグ
-" "set statusline+=%h      " ヘルプバッファ
-" "set statusline+=%w      " プレビューウィンドウ
-" "set statusline+=%m      " バッファ状態[+]とか
-
-" set statusline+=%=      " 区切り
-
-" "set statusline+=\ %{strftime('%c')}  " 時間
-" "set statusline+=%4l/%4L%4p%%   " どこにいるか
-" set statusline+=%4l/%4L   " どこにいるか
-" "set statusline+=\ %3c    " 列
-" set statusline+=\ %4B    " 文字コード
-" "set statusline+=%<       " 折り返しの指定
-
-"}}}
-
-"---------------------------------------------------------------------
 " EXコマンド {{{
 "---------------------------------------------------------------------
 " 文字コード変換
@@ -469,20 +440,10 @@ command! CopyFullPath
 " grep に cw(Quickfixを表示)を追加
 au QuickfixCmdPost vimgrep cw
 
-" railsアプリ上で、特定のアクションをブラウザで開く
-function! s:open_rails_app(path) abort
-  let filelist = split(glob("public/*.local"), "\n")
-  if len(filelist) > 0
-    let domain = split(filelist[0], "/")[1]
-    let url = join(["http://", domain, a:path], "")
-    execute "!open ".url
-  endif
-endfunction
-
 " ref : http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
-command! -nargs=* DashRuby !open dash://ruby:'<args>'
 
+command! -nargs=* DashRuby !open dash://ruby:'<args>'
 
 "}}}
 
@@ -583,11 +544,13 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 
 " :A で、テストと実装切り替え
 call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+call altr#define('app/model/%.rb', 'spec/model/%_spec.rb')
 call altr#define('app/controller/%.rb', 'spec/controller/%_spec.rb')
 call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
 command! A call altr#forward()
 "}}}
 
+" つくりかけ
 command! Issue call Issue_list()
 " vim_junk にある、issue_* を一覧表示したい
 function! Issue_list()
