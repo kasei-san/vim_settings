@@ -3,6 +3,10 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
+" 256色対応
+set t_Co=256
+colorscheme elflord
+
 "---------------------------------------------------------------------
 " neobundle.vim {{{
 "---------------------------------------------------------------------
@@ -23,11 +27,166 @@ NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'rhysd/vim-textobj-ruby'
 NeoBundle 'kana/vim-altr'
 
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'mac' : 'make -f make_mac.mak',
+      \    },
+      \ }
+NeoBundle 'vim-jp/vimdoc-ja'
+NeoBundle 'itchyny/lightline.vim'
+"}}}
+
+"---------------------------------------------------------------------
+" lightline.vim {{{
+"---------------------------------------------------------------------
+let g:lightline = {
+        \ 'colorscheme': 'solarized',
+        \ 'mode_map': {'c': 'NORMAL'},
+        \ 'active': {
+        \   'left': [
+        \     ['mode'],
+        \     ['fileformat', 'fileencoding'],
+        \     ['filename']
+        \   ],
+        \   'right': [
+        \     ['charvaluehex']
+        \   ]
+        \ },
+        \ 'inactive': {
+        \   'left': [
+        \     ['filename']
+        \   ],
+        \   'right': []
+        \ },
+        \ 'component_function': {
+        \   'filename'     : 'MyFilename',
+        \   'fileformat'   : 'MyFileformat',
+        \   'filetype'     : 'MyFiletype',
+        \   'fileencoding' : 'MyFileencoding',
+        \   'mode'         : 'MyMode'
+        \ },
+        \ 'subseparator': {'left': '|', 'right': ''},
+        \ }
+
+function! MyFilename()
+  return ('' != expand('%:f') ? expand('%:f') : '[No Name]')
+endfunction
+
+function! MyFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! MyFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! MyMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+"}}}
+
+"---------------------------------------------------------------------
+" unite {{{
+"---------------------------------------------------------------------
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'ujihisa/unite-colorscheme'
+NeoBundle 'ujihisa/unite-font'
+"}}}
+
+"---------------------------------------------------------------------
+" colorscheme {{{
+"---------------------------------------------------------------------
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'vim-scripts/twilight'
+NeoBundle 'jonathanfilip/vim-lucius'
+NeoBundle 'jpo/vim-railscasts-theme'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'vim-scripts/Wombat'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'vim-scripts/rdark'
+NeoBundle 'cocopon/iceberg.vim'
+
 " 起動時にチェック
 NeoBundleCheck
 "}}}
 
 source $VIMRUNTIME/macros/matchit.vim "ruby の do/end を % ジャンプできるようにする
+
+"---------------------------------------------------------------------
+" junk file."{{{
+" ref: http://vim-users.jp/2010/11/hack181/
+"---------------------------------------------------------------------
+command! -nargs=? Junk call s:open_junk_file(<f-args>) " 起動時に Junk を実行
+
+function! s:open_junk_file(...)
+  if !isdirectory(s:Junk_dir())
+    call mkdir(s:Junk_dir(), 'p')
+  endif
+
+  if a:0 >= 1
+    let l:filename = a:1
+  else
+    let l:filename = strftime('%Y-%m-%d_%H:%M.')
+  endif
+
+  execute 'edit '.s:Junk_dir().filename
+endfunction
+
+function! s:Junk_dir()
+  return $HOME . "/Dropbox/dotfiles/vim_junk/"
+endfunction
+
+command! -nargs=0 Junks call s:Junk_list()
+function! s:Junk_list()
+  let l:files = split(glob(s:Junk_dir()."*"), "\n")
+
+  " バッファ作成
+  let bufname = '__JUNKFILES__'
+  only
+  execute 'vertical leftabove 20new'.bufname
+
+  setlocal modifiable
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal noswapfile
+  setlocal nowrap
+  setlocal nobuflisted
+  setlocal filetype=issues
+  setlocal winfixheight
+
+  nnoremap <buffer> <silent> q :close<CR>
+
+  for file in files
+    call append(0, file)
+  endfor
+endfunction
+
+
+
+command! -nargs=0 JunkDir call s:open_junk_dir()
+function! s:open_junk_dir()
+  execute 'edit ' . $home . '/dropbox/dotfiles/vim_junk/'
+endfunction
+
+command! -nargs=1 JunkGrep call s:junk_grep(<f-args>)
+function! s:junk_grep(pattern)
+  execute 'vim /'. a:pattern . '/ '. $HOME . '/DropBox/dotFiles/vim_junk/*'
+endfunction
+
+"引数なしで起動した場合、とりあえずJunkする
+" refs : http://saihoooooooo.hatenablog.com/entry/2013/05/24/130744
+" autocmd VimEnter * nested if @% == '' && s:GetBufByte() == 0 | execute 'Junk' | endif
+" function! s:GetBufByte()
+"     let byte = line2byte(line('$') + 1)
+"     if byte == -1
+"         return 0
+"     else
+"         return byte - 1
+"     endif
+"     " 行末を削除
+"     execute 'delete _'
+" endfunction
 
 "---------------------------------------------------------------------
 " 補完 {{{
@@ -128,10 +287,6 @@ set shiftwidth=2
 "新しい行を作るときに高度な自動インデントを行う
 set cindent
 
-"カラースキーム
-"colorscheme wombat
-"set background=dark
-
 "タブ文字、行末など不可視文字を表示する
 set list
 
@@ -184,6 +339,13 @@ set modeline
 
 " コマンドラインウィンドウの幅
 set cmdwinheight=20
+
+" 2バイト文字有効
+set ambiwidth=double
+
+" 括弧のハイライトを消す(括弧が複雑だと重くなる)
+let loaded_matchparen = 1
+
 "}}}
 
 "---------------------------------------------------------------------
@@ -218,16 +380,15 @@ nnoremap /  /\v
 " s*でカーソル下のキーワードを置換
 nnoremap <expr> s* ':%s/\<' . expand('<cword>') . '\>/'
 vnoremap <expr> s* ':s/\<' . expand('<cword>') . '\>/'
+
+" Escで、画面再描画と、ハイライト消去
+" noremap <Esc> :nohlsearch<Return>:redraw!<Return><Esc>
+
 "}}}
 
 "---------------------------------------------------------------------
 " keymap {{{
 "---------------------------------------------------------------------
-"カレントディレクトリを出力
-cmap <c-x> <c-r>=expand('%:p:h')<Return>/
-"ファイル名(フルパス)を出力
-cmap <c-z> <c-r>=expand('%:p')<Return>
-
 "tabキーでバッファ移動
 nnoremap <tab> :bn<Return>
 nnoremap <s-tab> :bp<Return>
@@ -252,29 +413,39 @@ nnoremap J gJ
 " s-left, c-left がうまく動作しなかったので
 cnoremap <tab><Left> <S-Left>
 cnoremap <tab><Right> <S-Right>
+
+" ウィンドウ移動
+nnoremap <C-w><Right> <C-w>l
+nnoremap <C-w><Left> <C-w>h
+nnoremap <C-w><up> <C-w>k
+nnoremap <C-w><Down> <C-w>j
+
+" gvimでバックスラッシュが打てない件
+inoremap ¥ \
+
 "}}}
 
 "---------------------------------------------------------------------
 " ステータスライン {{{
 "---------------------------------------------------------------------
-set statusline=　
-"set statusline+=[%n]\  " バッファ番号
-set statusline+=%f\     " ファイル名
-set statusline+=%{'['.(&fenc!=''?&fenc:'?').'-'.&ff.']'} " 文字コード
-set statusline+=%y      " ファイルタイプ
-"set statusline+=%r      " 読み取り専用フラグ
-"set statusline+=%h      " ヘルプバッファ
-"set statusline+=%w      " プレビューウィンドウ
-"set statusline+=%m      " バッファ状態[+]とか
+ set statusline=　
+" "set statusline+=[%n]\  " バッファ番号
+" set statusline+=%f\     " ファイル名
+" set statusline+=%{'['.(&fenc!=''?&fenc:'?').'-'.&ff.']'} " 文字コード
+" set statusline+=%y      " ファイルタイプ
+" "set statusline+=%r      " 読み取り専用フラグ
+" "set statusline+=%h      " ヘルプバッファ
+" "set statusline+=%w      " プレビューウィンドウ
+" "set statusline+=%m      " バッファ状態[+]とか
 
-set statusline+=%=      " 区切り
+" set statusline+=%=      " 区切り
 
-"set statusline+=\ %{strftime('%c')}  " 時間
-"set statusline+=%4l/%4L%4p%%   " どこにいるか
-set statusline+=%4l/%4L   " どこにいるか
-"set statusline+=\ %3c    " 列
-set statusline+=\ %4B    " 文字コード
-"set statusline+=%<       " 折り返しの指定
+" "set statusline+=\ %{strftime('%c')}  " 時間
+" "set statusline+=%4l/%4L%4p%%   " どこにいるか
+" set statusline+=%4l/%4L   " どこにいるか
+" "set statusline+=\ %3c    " 列
+" set statusline+=\ %4B    " 文字コード
+" "set statusline+=%<       " 折り返しの指定
 
 "}}}
 
@@ -290,23 +461,68 @@ command! -bang -nargs=? Euc
 \ edit<bang> ++enc=euc-jp <args>
 
 command! CopyRelativePath
-\ let @*=join(remove( split( expand( '%:p' ), "/" ), len( split( getcwd(), "/" ) ), -1 ), "/") | echo "copied"
+\ let @*=join(remove( split( expand( '%:p' ), "/" ), len( split( getcwd(), "/" ) ), -1 ), "/") | echo "copied: ". @*
+
+command! CopyFullPath
+\ let @*=expand( '%:p' ) | echo "copied: ". @*
 
 " grep に cw(Quickfixを表示)を追加
 au QuickfixCmdPost vimgrep cw
+
+" railsアプリ上で、特定のアクションをブラウザで開く
+function! s:open_rails_app(path) abort
+  let filelist = split(glob("public/*.local"), "\n")
+  if len(filelist) > 0
+    let domain = split(filelist[0], "/")[1]
+    let url = join(["http://", domain, a:path], "")
+    execute "!open ".url
+  endif
+endfunction
+
+" ref : http://vim-users.jp/2009/05/hack17/
+command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
+command! -nargs=* DashRuby !open dash://ruby:'<args>'
+
+
 "}}}
 
 "---------------------------------------------------------------------
-" ファンクションキー {{{
+" unite {{{
 "---------------------------------------------------------------------
-" nnoremap <F2> :NERDTreeToggle<CR>
-" nnoremap <F2> :Unite buffer file file_mru<CR>
-" nnoremap <F2> :FufBuffer<CR>
-" nnoremap <F3> :FufFile<CR>
-" nnoremap <F4> :FufMruFile<CR>
+" The prefix key.
+ 
+" unite.vim keymap
+nnoremap <silent> ,u :<C-u>Unite<CR>
+nnoremap <silent> ,b :<C-u>Unite<Space>buffer   -quick-match -no-split<CR>
+nnoremap <silent> ,m :<C-u>Unite<Space>file_mru -no-split<CR>
+nnoremap <silent> ,f :<C-u>Unite<Space>file_rec -no-split<CR>
 
-"<F5>はコード実行用
+command! UniteColorScheme
+\ Unite colorscheme -auto-preview
 
+command! UniteFont
+\ Unite font -auto-preview
+
+"Unite file_rec : カレントディレクトリ以下のファイル全て
+"Unite file_mru : 最近開いたファイル
+"Unite buffer : バッファ
+"Unite grep:. : カレントディレクトリ以下をgrep
+
+" insert modeで開始
+let g:unite_enable_start_insert = 1
+
+" 大文字小文字を区別しない
+let g:unite_enable_ignore_case = 1
+let g:unite_enable_smart_case = 1
+
+" 50行表示
+let g:unite_winheight = 50
+
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()
+  imap <buffer> <tab> <Down>
+  imap <buffer> <s-tab> <Up>
+endfunction
 "}}}
 
 "---------------------------------------------------------------------
@@ -324,7 +540,7 @@ augroup vimrc
 augroup END
 
 augroup erb
-  autocmd MyAutoCmd BufNewFile,BufRead *.erb setfiletype eruby.html
+  autocmd MyAutoCmd BufNewFile,BufRead *.erb setfiletype=eruby
 augroup END
 
 " ファイルタイプ毎の折りたたみ設定
@@ -355,7 +571,6 @@ endif
 " vim-rails が neocomplete と干渉する問題対策 {{{
 " refs https://github.com/tpope/vim-rails/issues/283#issuecomment-25172471
 "---------------------------------------------------------------------
-
 " rspec の シンタックス
 function! RSpecSyntax()
   hi def link rubyRailsTestMethod             Function
@@ -368,6 +583,39 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 
 " :A で、テストと実装切り替え
 call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
-call altr#define('controller/%.rb', 'spec/controller/%_spec.rb')
+call altr#define('app/controller/%.rb', 'spec/controller/%_spec.rb')
+call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
 command! A call altr#forward()
 "}}}
+
+command! Issue call Issue_list()
+" vim_junk にある、issue_* を一覧表示したい
+function! Issue_list()
+  let issue_files = split(glob($HOME . "/Dropbox/dotfiles/vim_junk/issue_*"), "\n")
+  let issues = {}
+  for file in issue_files
+    let issues[readfile(file, '', 1)[0]] = file
+  endfor
+
+  " バッファ作成
+  let bufname = '__ISSUES__'
+  execute 'botright 10new ' . bufname
+
+  setlocal modifiable
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal noswapfile
+  setlocal nowrap
+  setlocal nobuflisted
+  setlocal filetype=issues
+  setlocal winfixheight
+
+  nnoremap <buffer> <silent> q :close<CR>
+
+  for [title, file] in items(issues)
+    echo  split(title, '/')[-1]
+    "call append(0, split(title, '/')[-1])
+  endfor
+  " 行末を削除
+  execute 'delete _'
+endfunction
