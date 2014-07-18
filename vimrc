@@ -26,6 +26,7 @@ NeoBundle 'tpope/vim-surround'       " テキストオブジェクトを囲っ�
 NeoBundle 'kana/vim-textobj-user'    " 自作のテキストオブジェクトを作れる
 NeoBundle 'rhysd/vim-textobj-ruby'   " ruby 用のテキストオブジェクトを追加
 NeoBundle 'kana/vim-altr'            " 任意のファイルをトグルして開く
+NeoBundle 'koron/codic-vim'          " http://codic.jp/
 
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
