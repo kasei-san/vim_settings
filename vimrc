@@ -42,6 +42,14 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'ujihisa/unite-font'
+
+" バッファ
+nnoremap <silent> ,b :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+" カレントディレクトリ以下のファイルを検索
+nnoremap <silent> ,d :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+" 最近使ったファイルを検索
+nnoremap <silent> ,m :<C-u>Unite file_mru
+
 "}}}
 
 "---------------------------------------------------------------------
