@@ -402,6 +402,8 @@ command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
 
 command! -nargs=* DashRuby !open dash://ruby:'<args>'
 
+command! -nargs=1 Refe Ref refe <args>
+
 "}}}
 
 "---------------------------------------------------------------------
