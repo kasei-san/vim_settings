@@ -38,6 +38,10 @@ NeoBundle 'tpope/vim-fugitive'
 "：Gcommit    git commit
 "：Gblame     現在のソースをgit blame。vimが色づけしてくれる
 "：Gdiff      現在のソースの変更点をvimdiffで表示 
+NeoBundle 'Lokaltog/vim-easymotion'  " http://haya14busa.com/mastering-vim-easymotion/
+nmap s <Plug>(easymotion-s2) " 表示領域全てを検索
+nmap f <Plug>(easymotion-f2) " カーソル以降を検索
+nmap F <Plug>(easymotion-F2) " カーソル以前を検索
 
 NeoBundle 'kana/vim-smartword'
 nmap w   <Plug>(smartword-w)
@@ -51,7 +55,6 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 NeoBundle 'vim-jp/vimdoc-ja'
 NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'thinca/vim-ref'
 
 "---------------------------------------------------------------------
 " unite {{{
