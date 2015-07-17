@@ -28,6 +28,17 @@ NeoBundle 'rhysd/vim-textobj-ruby'   " ruby 用のテキストオブジェクト
 NeoBundle 'kana/vim-altr'            " 任意のファイルをトグルして開く
 NeoBundle 'koron/codic-vim'          " http://codic.jp/
 NeoBundle 'kannokanno/previm'        " http://kannokanno.hatenablog.com/entry/2013/06/11/225806
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'tpope/vim-fugitive'
+"：Gstatus    新しい窓を作ってgit statusを表示
+"：Gwrite     現在開いているソースをgit add
+"：Gread      現在開いているソースの直前のコミット時のソースを表示
+"：Gmove      destination/path    現在開いているソースをgit mvする
+"：Gremove    現在開いているソースをgit rmする
+"：Gcommit    git commit
+"：Gblame     現在のソースをgit blame。vimが色づけしてくれる
+"：Gdiff      現在のソースの変更点をvimdiffで表示 
+
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'mac' : 'make -f make_mac.mak',

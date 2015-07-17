@@ -1,3 +1,6 @@
 [submodule "bundle/neobundle.vim"]
 	path = bundle/neobundle.vim
 	url = git://github.com/Shougo/neobundle.vim
+[submodule "previm/font-awesome"]
+	path = previm/font-awesome
+	url = git@github.com:FortAwesome/Font-Awesome.git
