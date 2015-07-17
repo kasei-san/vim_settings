@@ -19,7 +19,7 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'vim-scripts/svn-diff.vim' " commit 時に差分を出してくれる
-NeoBundle 'h1mesuke/vim-alignta'     " 縦軸の整形
+NeoBundle 'junegunn/vim-easy-align'  " 縦軸の整形
 NeoBundle 'The-NERD-Commenter'       " コメントトグル
 NeoBundle 'Shougo/neocomplete.vim'   " 自動補完
 NeoBundle 'tpope/vim-surround'       " テキストオブジェクトを囲っている文字列をいじれる
