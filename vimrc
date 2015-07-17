@@ -39,6 +39,11 @@ NeoBundle 'tpope/vim-fugitive'
 "：Gblame     現在のソースをgit blame。vimが色づけしてくれる
 "：Gdiff      現在のソースの変更点をvimdiffで表示 
 
+NeoBundle 'kana/vim-smartword'
+nmap w   <Plug>(smartword-w)
+nmap b   <Plug>(smartword-b)
+nmap e   <Plug>(smartword-e)
+
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'mac' : 'make -f make_mac.mak',
