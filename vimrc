@@ -27,7 +27,7 @@ NeoBundle 'kana/vim-textobj-user'    " 自作のテキストオブジェクト�
 NeoBundle 'rhysd/vim-textobj-ruby'   " ruby 用のテキストオブジェクトを追加
 NeoBundle 'kana/vim-altr'            " 任意のファイルをトグルして開く
 NeoBundle 'koron/codic-vim'          " http://codic.jp/
-
+NeoBundle 'kannokanno/previm'        " http://kannokanno.hatenablog.com/entry/2013/06/11/225806
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'mac' : 'make -f make_mac.mak',
@@ -122,82 +122,6 @@ endfunction
 "}}}
 
 source $VIMRUNTIME/macros/matchit.vim "ruby の do/end を % ジャンプできるようにする
-
-"---------------------------------------------------------------------
-" junk file."{{{
-" ref: http://vim-users.jp/2010/11/hack181/
-"---------------------------------------------------------------------
-command! -nargs=? Junk call s:open_junk_file(<f-args>)
-
-function! s:open_junk_file(...)
-  if !isdirectory(s:Junk_dir())
-    call mkdir(s:Junk_dir(), 'p')
-  endif
-
-  if a:0 >= 1
-    let l:filename = a:1
-  else
-    let l:filename = strftime('%Y-%m-%d_%H:%M.')
-  endif
-
-  execute 'edit '.s:Junk_dir().filename
-endfunction
-
-function! s:Junk_dir()
-  return $HOME . "/Dropbox/dotfiles/vim_junk/"
-endfunction
-
-command! -nargs=0 Junks call s:Junk_list()
-function! s:Junk_list()
-  let l:files = split(glob(s:Junk_dir()."*"), "\n")
-
-  " バッファ作成
-  let bufname = '__JUNKFILES__'
-  only
-  execute 'vertical leftabove 20new'.bufname
-
-  setlocal modifiable
-  setlocal buftype=nofile
-  setlocal bufhidden=delete
-  setlocal noswapfile
-  setlocal nowrap
-  setlocal nobuflisted
-  setlocal filetype=issues
-  setlocal winfixheight
-
-  nnoremap <buffer> <silent> q :close<CR>
-
-  for file in files
-    call append(0, file)
-  endfor
-endfunction
-
-
-
-command! -nargs=0 JunkDir call s:open_junk_dir()
-function! s:open_junk_dir()
-  execute 'edit ' . $home . '/dropbox/dotfiles/vim_junk/'
-endfunction
-
-command! -nargs=1 JunkGrep call s:junk_grep(<f-args>)
-function! s:junk_grep(pattern)
-  execute 'vim /'. a:pattern . '/ '. $HOME . '/DropBox/dotFiles/vim_junk/*'
-endfunction
-
-"引数なしで起動した場合、とりあえずJunkする
-" refs : http://saihoooooooo.hatenablog.com/entry/2013/05/24/130744
-" autocmd VimEnter * nested if @% == '' && s:GetBufByte() == 0 | execute 'Junk' | endif
-" function! s:GetBufByte()
-"     let byte = line2byte(line('$') + 1)
-"     if byte == -1
-"         return 0
-"     else
-"         return byte - 1
-"     endif
-"     " 行末を削除
-"     execute 'delete _'
-" endfunction
-" }}}
 
 "---------------------------------------------------------------------
 " 補完 {{{
@@ -428,7 +352,7 @@ nnoremap <C-w><Down> <C-w>j
 " gvimでバックスラッシュが打てない件
 inoremap ¥ \
 
-inoremap Y y$
+"inoremap Y y$
 
 " インクリメントを単純に
 nnoremap + <C-a>
@@ -610,3 +534,96 @@ augroup BinaryXXD
         autocmd BufWritePost * if &binary | silent %!xxd -g 1
         autocmd BufWritePost * set nomod | endif
 augroup END
+
+"---------------------------------------------------------------------
+" previm #{{{
+" ref: https://github.com/kannokanno/previm
+"---------------------------------------------------------------------
+augroup PrevimSettings
+  autocmd!
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
+let g:previm_open_cmd = 'open -a firefox'
+"}}}
+
+"---------------------------------------------------------------------
+" junk file."{{{
+" ref: http://vim-users.jp/2010/11/hack181/
+"---------------------------------------------------------------------
+command! -nargs=? Junk call s:open_junk_file(<f-args>)
+
+function! s:open_junk_file(...)
+  if !isdirectory(s:Junk_dir())
+    call mkdir(s:Junk_dir(), 'p')
+  endif
+
+  if a:0 >= 1
+    let l:filename = a:1
+    execute 'edit '.s:Junk_dir().filename
+  else
+    let l:timestr = strftime('%Y-%m-%d_%H:%M')
+    let l:filename = timestr.'.md'
+    execute 'edit '.s:Junk_dir().filename
+  endif
+
+  if filename =~ '.md$'
+    call setline(1, '#'.filename)
+    execute 'PrevimOpen'
+  end
+endfunction
+
+function! s:Junk_dir()
+  return $HOME . "/Dropbox/dotfiles/vim_junk/"
+endfunction
+
+command! -nargs=0 Junks call s:Junk_list()
+function! s:Junk_list()
+  let l:files = split(glob(s:Junk_dir()."*"), "\n")
+
+  " バッファ作成
+  let bufname = '__JUNKFILES__'
+  only
+  execute 'vertical leftabove 20new'.bufname
+
+  setlocal modifiable
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal noswapfile
+  setlocal nowrap
+  setlocal nobuflisted
+  setlocal filetype=issues
+  setlocal winfixheight
+
+  nnoremap <buffer> <silent> q :close<CR>
+
+  for file in files
+    call append(0, file)
+  endfor
+endfunction
+
+command! -nargs=0 JunkDir call s:open_junk_dir()
+function! s:open_junk_dir()
+  execute 'edit ' . $home . '/dropbox/dotfiles/vim_junk/'
+endfunction
+
+command! -nargs=1 JunkGrep call s:junk_grep(<f-args>)
+function! s:junk_grep(pattern)
+  execute 'vim /'. a:pattern . '/ '. $HOME . '/DropBox/dotFiles/vim_junk/*'
+endfunction
+
+command! -nargs=? Nippo call s:open_junk_file_nippo()
+function! s:open_junk_file_nippo()
+  let l:date = strftime('%Y-%m-%d')
+  let l:filename = 'nippo_'.date.'.md'
+  call s:open_junk_file(filename)
+  call setline(1, strftime('%Y/%m/%d').' ('.strftime('%a').') 日報 小林')
+  call append('$', [
+\   '##<i class="fa fa-clock-o"></i> 時間配分(MTG時間は略)',
+\   '##<i class="fa fa-pencil-square-o"></i> 特記事項','',
+\   '##<i class="fa fa-share-square-o"></i> TODO','',
+\   '##<i class="fa fa-twitter-square"></i> 雑感','',
+\ ])
+  execute 'w'
+endfunction
+
+" }}}
