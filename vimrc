@@ -484,13 +484,7 @@ set backupskip=/tmp/*,/private/tmp/*
 "---------------------------------------------------------------------
 "全角スペースを強調
 highlight! zenkakuda ctermbg=grey ctermfg=grey guibg=black
-if &encoding ==# 'utf-8'
-	match zenkakuda /　/
-else
-	" win32のコンソールvimはsjisで設定ファイルを読むので、
-	" sjisの全角スペースの文字コードを指定してやる
-	match zenkakuda /\%u8140/
-endif
+match zenkakuda /　/
 "}}}
 
 "---------------------------------------------------------------------
