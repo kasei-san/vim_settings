@@ -487,27 +487,12 @@ highlight! zenkakuda ctermbg=grey ctermfg=grey guibg=black
 match zenkakuda /　/
 "}}}
 
-"---------------------------------------------------------------------
-" vim-rails が neocomplete と干渉する問題対策 {{{
-" refs https://github.com/tpope/vim-rails/issues/283#issuecomment-25172471
-"---------------------------------------------------------------------
-" rspec の シンタックス
-function! RSpecSyntax()
-  hi def link rubyRailsTestMethod             Function
-  syn keyword rubyRailsTestMethod describe context it its specify shared_examples_for it_should_behave_like before after around subject fixtures controller_name helper_name
-  syn match rubyRailsTestMethod '\<let\>!\='
-  syn keyword rubyRailsTestMethod violated pending expect double mock mock_model stub_model
-  syn match rubyRailsTestMethod '\.\@<!\<stub\>!\@!'
-endfunction
-autocmd BufReadPost *_spec.rb call RSpecSyntax()
-
 " :A で、テストと実装切り替え
 call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
 call altr#define('app/model/%.rb', 'spec/model/%_spec.rb')
 call altr#define('app/controller/%.rb', 'spec/controller/%_spec.rb')
 call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
 command! A call altr#forward()
-"}}}
 
 " つくりかけ
 command! Issue call Issue_list()
