@@ -59,13 +59,19 @@ NeoBundle 'thinca/vim-ref'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'ujihisa/unite-font'
+NeoBundle 'Shougo/neomru.vim'
 
+" めんどいので全部探す
+nnoremap <silent> ,u :<C-u>UniteWithBufferDir -buffer-name=files file buffer file_mru<CR>
 " バッファ
-nnoremap <silent> ,b :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> ,b :<C-u>Unite buffer<CR>
 " カレントディレクトリ以下のファイルを検索
 nnoremap <silent> ,d :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 " 最近使ったファイルを検索
 nnoremap <silent> ,m :<C-u>Unite file_mru
+" レジスタ
+nnoremap <silent> ,r :<C-u>Unite -buffer-name=register register
+
 
 "}}}
 
