@@ -615,19 +615,4 @@ function! s:junk_grep(pattern)
   execute 'vim /'. a:pattern . '/ '. $HOME . '/DropBox/dotFiles/vim_junk/*'
 endfunction
 
-command! -nargs=? Nippo call s:open_junk_file_nippo()
-function! s:open_junk_file_nippo()
-  let l:date = strftime('%Y-%m-%d')
-  let l:filename = 'nippo_'.date.'.md'
-  call s:open_junk_file(filename)
-  call setline(1, strftime('%Y/%m/%d').' ('.strftime('%a').') 日報 小林')
-  call append('$', [
-\   '##<i class="fa fa-clock-o"></i> 時間配分(MTG時間は略)',
-\   '##<i class="fa fa-pencil-square-o"></i> 特記事項','',
-\   '##<i class="fa fa-share-square-o"></i> TODO','',
-\   '##<i class="fa fa-twitter-square"></i> 雑感','',
-\ ])
-  execute 'w'
-endfunction
-
 " }}}
